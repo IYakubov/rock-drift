@@ -578,12 +578,7 @@ function updateGame(dt){
     s.x=clamp(s.x+(s.vx+s.kx)*sec,SHIP_R,AW-SHIP_R);
     s.y=clamp(s.y+(s.vy+s.ky)*sec,SHIP_R,AH-SHIP_R);
     s.mag=Math.hypot(inp.f,inp.s);
-    if(s.mag>0.15){
-      let d=Math.atan2(inp.s,inp.f)-s.ang;
-      while(d>Math.PI)d-=2*Math.PI;
-      while(d<-Math.PI)d+=2*Math.PI;
-      s.ang+=d*Math.min(1,sec*10);
-    }
+    // ship always points straight up — tilting only translates it (left/right/fwd/back), it never turns
     s.trail.push({x:s.x,y:s.y});
     if(s.trail.length>12) s.trail.shift();
   }
