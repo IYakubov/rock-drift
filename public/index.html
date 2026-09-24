@@ -259,9 +259,9 @@ const SHIP_HIT_R=16;          // collision size
 const SHIP_SPEED=340;         // px/sec at full tilt
 const INVULN_TIME=1100;       // ms of blinking after a hit
 const START_INVULN=1600;      // ms of grace at the start of a round
-const WAVE_DURATION=20000;    // ms between difficulty steps
+const WAVE_DURATION=12000;    // ms between difficulty steps (was 20000 — waves now escalate much faster)
 const END_DELAY=1800;         // ms of explosion before the result screen
-const MAX_ROCKS=34;
+const MAX_ROCKS=48;
 const SLOTS=['A','B'];
 
 const PAL={
@@ -289,7 +289,7 @@ const keysDown=new Set();
 try{ bestTime=parseInt(localStorage.getItem('rockDriftBest')||'0',10)||0; }catch(e){}
 
 function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v));}
-function baseRocks(){return mode==='duo'?8:6;}
+function baseRocks(){return mode==='duo'?14:11;}
 function slotName(i){return mode==='duo'?'Pilot '+(i+1):'Pilot';}
 function fmtTime(ms){
   const s=ms/1000;
@@ -335,7 +335,7 @@ function makeShip(i){
 function spawnRock(fromEdge){
   const roll=Math.random();
   const r=roll<.35?15+Math.random()*7:roll<.75?24+Math.random()*8:38+Math.random()*10;
-  const speedMul=Math.min(2.2,1+wave*0.08);
+  const speedMul=Math.min(3.4,1+wave*0.16);
   let x,y,tries=0;
   do{
     if(fromEdge){
@@ -552,8 +552,8 @@ function updateGame(dt){
       updateHUD();
     }
     spawnCd-=dt;
-    const target=Math.min(MAX_ROCKS,baseRocks()+(wave-1)*3);
-    if(rocks.length<target&&spawnCd<=0){spawnRock(true);spawnCd=700;}
+    const target=Math.min(MAX_ROCKS,baseRocks()+(wave-1)*6);
+    if(rocks.length<target&&spawnCd<=0){spawnRock(true);spawnCd=400;}
     if(mode==='solo') $('score-val').textContent=fmtTime(elapsed);
   }
 
